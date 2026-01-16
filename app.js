@@ -18,19 +18,31 @@ document.addEventListener("DOMContentLoaded", () => {
       card.className = "service-card";
       card.dataset.serviceId = svc.id;
 
-      const thumb = document.createElement("div");
-      thumb.className = "service-card-thumb";
+    const thumb = document.createElement("div");
+    thumb.className = "service-card-thumb";
 
+    // 用服務名稱前 2 個字當縮圖文字
+    const initials =
+      (svc.name && svc.name.trim().slice(0, 2)) || "App";
+
+    if (svc.thumbnail) {
       const img = document.createElement("img");
-      img.src = svc.thumbnail || "";
+      img.src = svc.thumbnail;
       img.alt = svc.name || "服務縮圖";
 
-      // 如果載入圖片失敗，用文字 fallback
       img.onerror = () => {
-        thumb.innerHTML = `<span style="font-size:0.8rem;color:#64748b;">No Img</span>`;
+    // 載圖失敗 → 換成文字縮圖
+        thumb.classList.add("thumb-fallback");
+        thumb.innerHTML = `<span class="thumb-fallback-text">${initials}</span>`;
       };
 
       thumb.appendChild(img);
+    } else {
+      // 一開始就沒有 thumbnail → 直接用文字縮圖
+      thumb.classList.add("thumb-fallback");
+      thumb.innerHTML = `<span class="thumb-fallback-text">${initials}</span>`;
+    }
+
 
       const body = document.createElement("div");
       body.className = "service-card-body";

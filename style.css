@@ -107,6 +107,7 @@ body {
   background: radial-gradient(circle at top left, #0b1120, #020617);
 }
 
+
 .service-card-thumb {
   width: 52px;
   height: 52px;
@@ -119,28 +120,22 @@ body {
   flex-shrink: 0;
 }
 
+/* 真正有載到圖片時 */
 .service-card-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.service-card-body {
-  flex: 1;
-  min-width: 0;
+/* 載不到圖時，用文字縮圖 */
+.service-card-thumb.thumb-fallback {
+  background: linear-gradient(135deg, #1d4ed8, #22c55e);
 }
 
-.service-card-name {
-  margin: 0 0 4px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #e5e7eb;
-}
-
-.service-card-desc {
-  margin: 0;
+.thumb-fallback-text {
   font-size: 0.8rem;
-  color: #9ca3af;
+  font-weight: 600;
+  color: #e2e8f0;
 }
 
 /* 服務畫面（內嵌 iframe） */
@@ -194,14 +189,22 @@ body {
   color: #94a3b8;
 }
 
-/* iframe 外框 */
 
+/* 服務畫面 iframe 外框 */
 .service-frame-wrapper {
-  flex: 1;
-  min-height: min(70vh, 520px);
+  width: 100%;
+  /* 幾乎吃滿螢幕高度：桌機大概 85vh，最多 780px */
+  height: min(85vh, 780px);
   border-radius: 14px;
   overflow: hidden;
   border: 1px solid #1f2937;
+}
+
+/* 小螢幕（手機）再調整一下高度，避免被網址列吃掉 */
+@media (max-width: 640px) {
+  .service-frame-wrapper {
+    height: 80vh;
+  }
 }
 
 .service-frame-wrapper iframe {
@@ -209,14 +212,4 @@ body {
   height: 100%;
   border: none;
   background: #020617;
-}
-
-/* footer */
-
-.app-footer {
-  padding: 8px 16px 16px;
-  text-align: center;
-  font-size: 0.75rem;
-  color: #64748b;
-  border-top: 1px solid #020617;
 }
