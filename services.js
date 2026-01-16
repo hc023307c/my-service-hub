@@ -16,7 +16,15 @@ const SERVICES = [
     description: "輸入年資與條件，試算 114 年年終與相關獎金。",
     url: "https://114-year-bonus-new.vercel.app/",
     thumbnail: "https://114-year-bonus-new.vercel.app/favicon.ico"
+  },
+  {
+    id: "Countdown-Timer",
+    name: "課堂計時器",
+    description: "可同時設定時間倒數計時，並於時間結束時撥放提醒音樂。",
+    url: "https://countdown-timer-navy-one.vercel.app/",
+    thumbnail: "https://countdown-timer-navy-one.vercel.app/favicon.ico"
   }
+
 
   // 未來要新增服務，照這樣加就好：
   // {
