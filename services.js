@@ -23,7 +23,14 @@ const SERVICES = [
     description: "可同時設定時間倒數計時，並於時間結束時撥放提醒音樂。",
     url: "https://countdown-timer-navy-one.vercel.app/",
     thumbnail: "https://countdown-timer-navy-one.vercel.app/favicon.ico"
-  }
+  },
+  {
+  id: "WifiQRCode",
+  name: "Wi-Fi QRCode 產生器",
+  description: "輸入 SSID、加密方式與密碼，快速產出支援 iPhone 與 Android 的 Wi-Fi QRCode。",
+  url: "https://wi-fi-q-rcode-generator.vercel.app/",
+  thumbnail: "https://wi-fi-q-rcode-generator.vercel.app/favicon.ico"
+}
 
 
   // 未來要新增服務，照這樣加就好：
