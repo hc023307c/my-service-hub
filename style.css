@@ -1,86 +1,4 @@
-/* 全域基礎設定 */
-* {
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-html {
-  font-size: clamp(14px, 3.2vw, 16px);
-}
-
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "PingFang TC", "Microsoft JhengHei", sans-serif;
-  background: #020617;
-  color: #e2e8f0;
-  line-height: 1.5;
-}
-
-.app-shell {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Header */
-
-.app-header {
-  padding: 12px 16px;
-  border-bottom: 1px solid #1e293b;
-  background: radial-gradient(circle at top left, #1e293b, #020617);
-}
-
-.app-title-group {
-  max-width: 1040px;
-  margin: 0 auto;
-}
-
-.app-title {
-  margin: 0 0 4px;
-  font-size: clamp(1.3rem, 3.6vw, 1.8rem);
-  font-weight: 700;
-  color: #f9fafb;
-}
-
-.app-subtitle {
-  margin: 0;
-  font-size: clamp(0.8rem, 2.6vw, 0.95rem);
-  color: #94a3b8;
-}
-
-/* Main */
-
-.app-main {
-  flex: 1;
-  width: min(1040px, 100% - 24px);
-  margin: 12px auto 16px;
-}
-
-/* 共用 view */
-
-.view {
-  border-radius: 16px;
-  background: #020617;
-  border: 1px solid #1f2937;
-  padding: clamp(12px, 3vw, 18px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.65);
-}
-
-.hidden {
-  display: none;
-}
-
-.section-title {
-  margin: 0 0 10px;
-  font-size: clamp(1rem, 3vw, 1.2rem);
-  font-weight: 600;
-  color: #e5e7eb;
-}
-
 /* 主選單：服務卡片 grid */
-
 .service-grid {
   display: grid;
   gap: 12px;
@@ -93,10 +11,9 @@ body {
   }
 }
 
-/* 服務卡片本體 */
-
+/* 卡片本體：有科技感繞圈效果 */
 .service-card {
-  position: relative; /* 為了邊框動畫的 ::before / ::after */
+  position: relative;
   display: flex;
   gap: 10px;
   background: #020617;
@@ -105,23 +22,22 @@ body {
   padding: 10px 12px;
   cursor: pointer;
   overflow: hidden;
+  align-items: center;
   transition:
     transform 0.08s ease,
     box-shadow 0.12s ease,
-    border-color 0.12s ease,
-    background 0.12s ease;
-  align-items: center;
+    background 0.12s ease,
+    border-color 0.12s ease;
 }
 
 .service-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 14px 32px rgba(15, 23, 42, 0.8);
-  border-color: #22c55e;
   background: radial-gradient(circle at top left, #0b1120, #020617);
+  border-color: #22c55e;
 }
 
-/* ★ 科技繞圈圈邊框效果：hover 一次繞一圈 */
-
+/* 🔷 科技感「繞一圈」邊框動畫（桌機 hover 時才會跑） */
 .service-card::before {
   content: "";
   position: absolute;
@@ -165,8 +81,7 @@ body {
   }
 }
 
-/* 額外加一條斜向掃光（同樣 hover 一次） */
-
+/* 再加一道斜向掃光，感覺更科技 */
 .service-card::after {
   content: "";
   position: absolute;
@@ -174,32 +89,30 @@ body {
   background: linear-gradient(
     120deg,
     transparent 0%,
-    rgba(34, 197, 94, 0.22) 50%,
+    rgba(34, 197, 94, 0.18) 50%,
     transparent 100%
   );
-  transform: translateX(-120%);
+  transform: translateX(-130%);
   opacity: 0;
   pointer-events: none;
 }
 
 .service-card:hover::after {
-  opacity: 1;
   animation: scanBeam 0.6s ease-out forwards;
 }
 
 @keyframes scanBeam {
   from {
-    transform: translateX(-120%);
-    opacity: 0.2;
+    transform: translateX(-130%);
+    opacity: 0.3;
   }
   to {
-    transform: translateX(120%);
+    transform: translateX(130%);
     opacity: 0;
   }
 }
 
 /* 左側縮圖：桌機約 1/3 寬 */
-
 .service-card-thumb {
   flex: 0 0 33%;
   height: 110px;
@@ -209,7 +122,7 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  z-index: 1; /* 避免被 ::before / ::after 蓋住 */
+  z-index: 1; /* 避免被 ::before / ::after 蓋掉 */
 }
 
 /* 真正有載到圖片時 */
@@ -230,8 +143,7 @@ body {
   color: #e2e8f0;
 }
 
-/* 右側文字：桌機約 2/3 寬 */
-
+/* 右側文字：桌機約 2/3 寬＋字放大 */
 .service-card-body {
   flex: 0 0 67%;
   padding-left: 10px;
@@ -243,104 +155,21 @@ body {
 
 .service-card-name {
   margin: 0 0 4px;
-  font-size: 1.08rem;
+  font-size: 1.1rem;      /* 字體加大 */
   font-weight: 600;
   color: #e5e7eb;
 }
 
 .service-card-desc {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 0.9rem;      /* 描述也變大一點 */
   color: #94a3b8;
   opacity: 0.95;
 }
 
-/* 服務畫面（內嵌 iframe） */
-
-.view-service {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.service-header {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 4px;
-  flex-wrap: wrap;
-}
-
-.btn-back {
-  border-radius: 999px;
-  border: 1px solid #334155;
-  background: #0b1120;
-  color: #e2e8f0;
-  padding: 6px 12px;
-  font-size: 0.85rem;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  z-index: 1;
-}
-
-.btn-back:hover {
-  background: #020617;
-  border-color: #22c55e;
-}
-
-.service-header-text {
-  min-width: 0;
-}
-
-.service-title {
-  margin: 0 0 2px;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #e5e7eb;
-}
-
-.service-desc {
-  margin: 0;
-  font-size: 0.8rem;
-  color: #94a3b8;
-}
-
-/* 服務畫面 iframe 外框 */
-
-.service-frame-wrapper {
-  width: 100%;
-  height: min(85vh, 780px);
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid #1f2937;
-}
-
-.service-frame-wrapper iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  background: #020617;
-}
-
-/* Footer */
-
-.app-footer {
-  padding: 8px 16px 14px;
-  text-align: center;
-  font-size: 0.75rem;
-  color: #64748b;
-  border-top: 1px solid #020617;
-}
-
-/* 手機版調整：圖在上，文在下，圖再大一點 */
-
+/* 🔻 手機版（寬度 <= 640px）：
+   圖在上、文字在下，圖更大一點，看起來像 App 卡片 */
 @media (max-width: 640px) {
-  .service-frame-wrapper {
-    height: 80vh;
-  }
-
   .service-card {
     flex-direction: column;
     align-items: stretch;
@@ -349,14 +178,14 @@ body {
   .service-card-thumb {
     flex: 0 0 auto;
     width: 100%;
-    height: 200px;
+    height: 200px;  /* 手機圖變大，排版才有差異感 */
   }
 
   .service-card-body {
     flex: 0 0 auto;
     width: 100%;
     padding-left: 0;
-    margin-top: 6px;
+    margin-top: 8px;
     text-align: center;
   }
 
