@@ -98,6 +98,7 @@ body {
   cursor: pointer;
   transition: transform 0.08s ease, box-shadow 0.12s ease,
     border-color 0.12s ease, background 0.12s ease;
+  align-items: center; /* ★ 新增：圖文字垂直置中 */
 }
 
 .service-card:hover {
@@ -107,17 +108,16 @@ body {
   background: radial-gradient(circle at top left, #0b1120, #020617);
 }
 
-
+/* ★ 修改：縮圖改佔 50%，高度拉高一點 */
 .service-card-thumb {
-  width: 52px;
-  height: 52px;
+  flex: 0 0 50%;        /* 左邊佔 50% 寬度 */
+  height: 110px;        /* 卡片高度，可自己調整 100–140 */
   border-radius: 12px;
   background: #0f172a;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  flex-shrink: 0;
 }
 
 /* 真正有載到圖片時 */
@@ -136,6 +136,28 @@ body {
   font-size: 0.8rem;
   font-weight: 600;
   color: #e2e8f0;
+}
+
+/* ★ 新增：右邊文字區塊，佔剩下 50% */
+.service-card-body {
+  flex: 1;
+  padding-left: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.service-card-name {
+  margin: 0 0 4px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+.service-card-desc {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #94a3b8;
 }
 
 /* 服務畫面（內嵌 iframe） */
@@ -189,7 +211,6 @@ body {
   color: #94a3b8;
 }
 
-
 /* 服務畫面 iframe 外框 */
 .service-frame-wrapper {
   width: 100%;
@@ -200,16 +221,52 @@ body {
   border: 1px solid #1f2937;
 }
 
-/* 小螢幕（手機）再調整一下高度，避免被網址列吃掉 */
-@media (max-width: 640px) {
-  .service-frame-wrapper {
-    height: 80vh;
-  }
-}
-
 .service-frame-wrapper iframe {
   width: 100%;
   height: 100%;
   border: none;
   background: #020617;
+}
+
+/* ★ 新增：手機版調整卡片排版 & iframe 高度 */
+@media (max-width: 640px) {
+  .service-frame-wrapper {
+    height: 80vh;
+  }
+
+  .service-card {
+    flex-direction: column;    /* 手機改成圖在上、文字在下 */
+    align-items: stretch;
+  }
+
+  .service-card-thumb {
+    flex: 0 0 auto;
+    width: 100%;
+    height: 180px;             /* 手機版圖再大一點，好看 */
+  }
+
+  .service-card-body {
+    flex: 0 0 auto;
+    width: 100%;
+    padding-left: 0;
+    margin-top: 6px;
+    text-align: center;        /* 手機版文字置中 */
+  }
+
+  .service-card-name {
+    font-size: 1rem;
+  }
+
+  .service-card-desc {
+    font-size: 0.85rem;
+  }
+}
+
+/* Footer 可加的話 */
+.app-footer {
+  padding: 8px 16px 14px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #64748b;
+  border-top: 1px solid #020617;
 }
