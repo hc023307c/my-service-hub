@@ -43,7 +43,7 @@ body {
   font-weight: 800;
   color: #f9fafb;
   letter-spacing: 0.02em;
-  text-shadow: 0 0 12px rgba(34, 197, 94, 0.25); /* 主題稍微亮一點 */
+  text-shadow: 0 0 12px rgba(34, 197, 94, 0.3); /* 主題稍微亮一點 */
 }
 
 .app-subtitle {
@@ -101,82 +101,67 @@ body {
   position: relative;
   display: flex;
   gap: 10px;
-  background: #020617;
+  background: radial-gradient(circle at top left, #020617, #020617);
   border-radius: 14px;
-  border: 1px solid #1f2937;
+  border: 1px solid #0f172a; /* 底線：深色科技框 */
   padding: 10px 12px;
   cursor: pointer;
   overflow: hidden;
   align-items: center;
   transition:
     transform 0.08s ease,
-    box-shadow 0.12s ease,
-    background 0.12s ease,
-    border-color 0.12s ease;
+    box-shadow 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
 }
 
-.service-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.8);
-  background: radial-gradient(circle at top left, #0b1120, #020617);
-  border-color: #22c55e;
-}
-
-/* 科技感「繞一圈」邊框動畫（桌機 hover 時跑一圈） */
-
+/* 預設就有科技感外框：用 ::before 當內框光圈 */
 .service-card::before {
   content: "";
   position: absolute;
-  inset: 0;
-  border-radius: 14px;
-  border: 2px solid transparent;
+  inset: 1px;
+  border-radius: 12px;
+  border: 1px solid;
+  border-image: linear-gradient(135deg, #22c55e, #0ea5e9) 1; /* 綠→藍 漸層框 */
+  opacity: 0.9;
   pointer-events: none;
 }
 
-.service-card:hover::before {
-  animation: borderSweep 0.7s linear forwards;
+/* 預設也有一點微光 */
+.service-card {
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9),
+              0 14px 40px rgba(15, 23, 42, 0.9);
 }
 
-@keyframes borderSweep {
-  0% {
-    border-top-color: #22c55e;
-    border-right-color: transparent;
-    border-bottom-color: transparent;
-    border-left-color: transparent;
-  }
-  25% {
-    border-top-color: #22c55e;
-    border-right-color: #22c55e;
-    border-bottom-color: transparent;
-    border-left-color: transparent;
-  }
-  50% {
-    border-top-color: #22c55e;
-    border-right-color: #22c55e;
-    border-bottom-color: #22c55e;
-    border-left-color: transparent;
-  }
-  75% {
-    border-top-color: #22c55e;
-    border-right-color: #22c55e;
-    border-bottom-color: #22c55e;
-    border-left-color: #22c55e;
-  }
-  100% {
-    border-color: #22c55e;
-  }
+/* 滑過／互動時：外框顏色變化＋光感微變，科技感加強 */
+
+.service-card:hover,
+.service-card:active {
+  transform: translateY(-2px);
+  background: radial-gradient(circle at top left, #0b1120, #020617);
+  border-color: #1d4ed8; /* 外框主色偏藍 */
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.8),
+              0 18px 46px rgba(15, 23, 42, 0.95);
 }
 
-/* 加一道斜向掃光，增加科技感 */
+/* hover / active 時，內框顏色改成藍紫系，感覺不同科技層級 */
+
+.service-card:hover::before,
+.service-card:active::before {
+  border-image: linear-gradient(135deg, #38bdf8, #a855f7) 1;
+  opacity: 1;
+}
+
+/* 再加一條輕微掃光（只在 hover 時跑一下，手機沒有 hover 看不到也沒差） */
 
 .service-card::after {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    120deg,
+    125deg,
     transparent 0%,
-    rgba(34, 197, 94, 0.18) 50%,
+    rgba(56, 189, 248, 0.2) 50%,
     transparent 100%
   );
   transform: translateX(-130%);
@@ -191,7 +176,7 @@ body {
 @keyframes scanBeam {
   from {
     transform: translateX(-130%);
-    opacity: 0.3;
+    opacity: 0.35;
   }
   to {
     transform: translateX(130%);
@@ -231,7 +216,7 @@ body {
   color: #e2e8f0;
 }
 
-/* 右側文字：桌機約 2/3 寬 + 字放大 */
+/* 右側文字：桌機約 2/3 寬 + 字稍大 */
 
 .service-card-body {
   flex: 0 0 67%;
@@ -335,9 +320,17 @@ body {
   border-top: 1px solid #020617;
 }
 
-/* 手機版：圖在上、字在下，重點更清楚 */
+/* 手機版：圖在上、字在下，版面更好看 */
 
 @media (max-width: 640px) {
+  .app-title-group {
+    text-align: center;
+  }
+
+  .section-title {
+    text-align: center;
+  }
+
   .service-card {
     flex-direction: column;
     align-items: stretch;
@@ -363,13 +356,5 @@ body {
 
   .service-card-desc {
     font-size: 0.92rem;
-  }
-
-  .section-title {
-    text-align: center;
-  }
-
-  .app-title-group {
-    text-align: center;
   }
 }
