@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>我的服務主選單</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="app-title-group">
+        <h1 class="app-title">我的工具主選單</h1>
+        <p class="app-subtitle">集中入口，快速切換各種小服務</p>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <!-- 主選單畫面：服務卡片列表 -->
+      <section id="view-main" class="view view-main">
+        <h2 class="section-title">可用服務</h2>
+        <div id="serviceGrid" class="service-grid">
+          <!-- 卡片由 app.js 動態產生 -->
+        </div>
+      </section>
+
+      <!-- 服務內嵌畫面：用 iframe 載入外部服務 -->
+      <section id="view-service" class="view view-service hidden">
+        <div class="service-header">
+          <button id="backBtn" class="btn-back">← 回主選單</button>
+          <div class="service-header-text">
+            <h2 id="serviceTitle" class="service-title"></h2>
+            <p id="serviceDesc" class="service-desc"></p>
+          </div>
+        </div>
+
+        <div class="service-frame-wrapper">
+          <iframe
+            id="serviceFrame"
+            src=""
+            frameborder="0"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <span>© 2026 我的工具集合</span>
+    </footer>
+  </div>
+
+  <script src="services.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
