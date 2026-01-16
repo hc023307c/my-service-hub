@@ -30,6 +30,13 @@ const SERVICES = [
   description: "輸入 SSID、加密方式與密碼，快速產出支援 iPhone 與 Android 的 Wi-Fi QRCode。",
   url: "https://wi-fi-q-rcode-generator.vercel.app/",
   thumbnail: "https://wi-fi-q-rcode-generator.vercel.app/favicon.ico"
+},
+ {
+   id: "draw-people",
+   name: "號碼抽籤器",
+   description: "用號碼抽人 + 顏色紀錄 + 不重複/重複模式",
+   url: "https://draw-people.vercel.app",
+   thumbnail: "https://draw-people.vercel.app/favicon.ico"
 }
 
 
