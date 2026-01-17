@@ -134,10 +134,16 @@ body {
     0 14px 40px rgba(15, 23, 42, 0.8);
 }
 
-/* hover */
+/* hover（桌機） */
 .service-card:hover {
   transform: translateY(-2px);
   filter: brightness(1.12);
+  border-color: #3b82f6; /* 電腦版：外框變藍 */
+}
+
+.service-card:hover::before {
+  border-image: linear-gradient(135deg, #38bdf8, #6366f1) 1; /* 電腦版：內框漸層變藍紫 */
+  opacity: 1;
 }
 
 /* scan light */
@@ -298,7 +304,7 @@ body {
     height: calc(100vh - 130px);
   }
 
-  /* spotlight active：最靠中間那個外框變色 */
+  /* spotlight active：最靠中間那個外框變顏色（手機） */
   .service-card.service-card--active {
     filter: brightness(1.18);
     transform: translateY(-4px);
