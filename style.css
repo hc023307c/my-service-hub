@@ -1,119 +1,238 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const gridEl = document.getElementById("serviceGrid");
-  const viewMain = document.getElementById("view-main");
-  const viewService = document.getElementById("view-service");
-  const backBtn = document.getElementById("backBtn");
-  const serviceTitleEl = document.getElementById("serviceTitle");
-  const serviceDescEl = document.getElementById("serviceDesc");
-  const serviceFrameEl = document.getElementById("serviceFrame");
+/* === 基礎 === */
 
-  function renderServiceCards() {
-    gridEl.innerHTML = "";
-    SERVICES.forEach(svc => {
-      const card=document.createElement("div");
-      card.className="service-card";
-      card.dataset.serviceId=svc.id;
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-      const thumb=document.createElement("div");
-      thumb.className="service-card-thumb";
+html {
+  font-size: clamp(14px, 3.2vw, 16px);
+}
 
-      const initials=(svc.name && svc.name.trim().slice(0,2)) || "App";
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  background: #020617;
+  color: #e2e8f0;
+  line-height: 1.5;
+}
 
-      if(svc.thumbnail){
-        const img=document.createElement("img");
-        img.src=svc.thumbnail;
-        img.alt=svc.name;
-        img.onerror=()=>{
-          thumb.classList.add("thumb-fallback");
-          thumb.innerHTML=`<span class="thumb-fallback-text">${initials}</span>`;
-        };
-        thumb.appendChild(img);
-      } else {
-        thumb.classList.add("thumb-fallback");
-        thumb.innerHTML=`<span class="thumb-fallback-text">${initials}</span>`;
-      }
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
-      const body=document.createElement("div");
-      body.className="service-card-body";
+/* === Header === */
 
-      const nameEl=document.createElement("h3");
-      nameEl.className="service-card-name";
-      nameEl.textContent=svc.name;
+.app-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #1e293b;
+  background: radial-gradient(circle at top left, #1e293b, #020617);
+}
 
-      const descEl=document.createElement("p");
-      descEl.className="service-card-desc";
-      descEl.textContent=svc.description;
+.app-title-group {
+  max-width: 1040px;
+  margin: 0 auto;
+}
 
-      body.appendChild(nameEl);
-      body.appendChild(descEl);
-      card.appendChild(thumb);
-      card.appendChild(body);
+.app-title {
+  margin: 0 0 4px;
+  font-size: clamp(1.4rem, 3.8vw, 2rem);
+  font-weight: 800;
+  color: #f9fafb;
+  text-shadow: 0 0 12px rgba(34, 197, 94, 0.3);
+}
 
-      card.addEventListener("click",()=>openService(svc));
-      gridEl.appendChild(card);
-    });
+.app-subtitle {
+  margin: 0;
+  font-size: clamp(0.85rem, 2.6vw, 1rem);
+  color: #94a3b8;
+}
+
+/* === 主內容 === */
+
+.app-main {
+  flex: 1;
+  width: min(1040px, 100% - 24px);
+  margin: 12px auto 16px;
+}
+
+.view {
+  border-radius: 16px;
+  background: #020617;
+  border: 1px solid #1f2937;
+  padding: clamp(12px, 3vw, 18px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.65);
+}
+
+.hidden {
+  display: none;
+}
+
+.section-title {
+  margin: 0 0 10px;
+  font-size: clamp(1rem,3vw,1.2rem);
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+/* === Grid 卡片 === */
+
+.service-grid {
+  display: grid;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .service-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
   }
+}
 
-  function openService(service){
-    serviceTitleEl.textContent=service.name;
-    serviceDescEl.textContent=service.description||"";
-    serviceFrameEl.src=service.url;
-    viewMain.classList.add("hidden");
-    viewService.classList.remove("hidden");
+/* === 卡片基礎 === */
+
+.service-card {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: #020617;
+  border: 1px solid #0f172a;
+  cursor: pointer;
+  overflow: hidden;
+  align-items: center;
+  transition:
+    transform .12s ease,
+    box-shadow .15s ease,
+    filter .2s ease,
+    opacity .2s ease,
+    border-color .25s ease;
+}
+
+/* === 基礎科技內框 === */
+
+.service-card::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: 12px;
+  border: 1px solid;
+  border-image: linear-gradient(135deg,#22c55e,#0ea5e9) 1;
+  opacity: 0.8;
+  pointer-events: none;
+  transition: opacity .2s ease;
+}
+
+.service-card::after {
+  content: "";
+  position: absolute;
+  inset:0;
+  background: linear-gradient(125deg,transparent 0%,rgba(56,189,248,.2) 50%,transparent 100%);
+  transform: translateX(-130%);
+  opacity:0;
+  pointer-events:none;
+}
+
+/* === 桌機 hover === */
+
+@media (hover: hover) {
+  .service-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 8px rgba(56,189,248,.3),0 12px 28px rgba(0,0,0,.75);
   }
-
-  function backToMain(){
-    serviceFrameEl.src="";
-    viewService.classList.add("hidden");
-    viewMain.classList.remove("hidden");
+  .service-card:hover::before {
+    border-image: linear-gradient(135deg,#38bdf8,#a855f7) 1;
+    opacity:1;
   }
-
-  backBtn.addEventListener("click",backToMain);
-
-  /* === Spotlight (手機 + scroll) === */
-
-  function spotlightUpdate(){
-    const cards=[...document.querySelectorAll(".service-card")];
-    if(cards.length===0) return;
-
-    const centerY=window.innerHeight/2;
-    let best=null;
-    let bestDist=Infinity;
-
-    cards.forEach(card=>{
-      const rect=card.getBoundingClientRect();
-      const cardCenter=rect.top+rect.height/2;
-      const dist=Math.abs(cardCenter-centerY);
-      if(dist<bestDist){
-        bestDist=dist;
-        best=card;
-      }
-    });
-
-    cards.forEach(c=>{
-      if(c===best){
-        c.classList.add("active-center");
-        c.classList.remove("dim");
-      } else {
-        c.classList.remove("active-center");
-        c.classList.add("dim");
-      }
-    });
+  .service-card:hover::after {
+    animation: scanBeam .6s ease-out forwards;
   }
+}
 
-  let ticking=false;
-  function onScroll(){
-    if(!ticking){
-      requestAnimationFrame(()=>{
-        spotlightUpdate();
-        ticking=false;
-      });
-      ticking=true;
-    }
+@keyframes scanBeam {
+  from { transform: translateX(-130%); opacity: .35; }
+  to   { transform: translateX(130%); opacity: 0; }
+}
+
+/* === Spotlight + DIM (手機用) === */
+
+.service-card.dim {
+  opacity: .45;
+  filter: grayscale(.25) brightness(.8);
+  box-shadow:none;
+}
+
+.service-card.active-center {
+  opacity: 1;
+  filter: none;
+  transform: scale(1.02);
+}
+
+.service-card.active-center::before {
+  opacity: 1;
+  border-image: linear-gradient(135deg,#4ade80,#38bdf8) 1;
+}
+
+.service-card.active-center::after {
+  animation: scanBeam .6s ease-out forwards;
+}
+
+/* === Thumb + Body === */
+
+.service-card-thumb {
+  flex: 0 0 33%;
+  height: 110px;
+  border-radius: 12px;
+  background:#0f172a;
+  overflow: hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.service-card-thumb img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.service-card-body {
+  flex:0 0 67%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.service-card-name {
+  margin:0 0 4px;
+  font-weight:600;
+  font-size:1.08rem;
+}
+
+.service-card-desc {
+  margin:0;
+  font-size:.9rem;
+  color:#94a3b8;
+}
+
+/* === 手機版排版：字 → 圖，Spotlight + DIM 啟動 === */
+
+@media (max-width: 640px) {
+  .service-card {
+    flex-direction: column-reverse;
+    align-items: stretch;
   }
-
-  window.addEventListener("scroll",onScroll,{passive:true});
-
-  renderServiceCards();
-  spotlightUpdate();
-});
+  .service-card-thumb {
+    width:100%;
+    height:200px;
+  }
+  .service-card-body {
+    width:100%;
+    margin-bottom:8px;
+    text-align:center;
+  }
+}
