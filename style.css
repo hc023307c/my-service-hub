@@ -1,5 +1,4 @@
-/* === 基礎 === */
-
+/* 全域基礎設定 */
 * {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
@@ -12,9 +11,9 @@ html {
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
-  background: #020617;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang TC", "Microsoft JhengHei", sans-serif;
+  background: #020617; /* 深色底 */
   color: #e2e8f0;
   line-height: 1.5;
 }
@@ -25,7 +24,7 @@ body {
   flex-direction: column;
 }
 
-/* === Header === */
+/* Header */
 
 .app-header {
   padding: 12px 16px;
@@ -43,7 +42,8 @@ body {
   font-size: clamp(1.4rem, 3.8vw, 2rem);
   font-weight: 800;
   color: #f9fafb;
-  text-shadow: 0 0 12px rgba(34, 197, 94, 0.3);
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 12px rgba(34, 197, 94, 0.3); /* 主題稍微亮一點 */
 }
 
 .app-subtitle {
@@ -52,7 +52,7 @@ body {
   color: #94a3b8;
 }
 
-/* === 主內容 === */
+/* Main */
 
 .app-main {
   flex: 1;
@@ -60,12 +60,14 @@ body {
   margin: 12px auto 16px;
 }
 
+/* 共用 view */
+
 .view {
   border-radius: 16px;
   background: #020617;
   border: 1px solid #1f2937;
   padding: clamp(12px, 3vw, 18px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.65);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.65);
 }
 
 .hidden {
@@ -74,165 +76,306 @@ body {
 
 .section-title {
   margin: 0 0 10px;
-  font-size: clamp(1rem,3vw,1.2rem);
+  font-size: clamp(1rem, 3vw, 1.2rem);
   font-weight: 600;
   color: #e5e7eb;
 }
 
-/* === Grid 卡片 === */
+/* 主選單：服務卡片 grid */
 
 .service-grid {
   display: grid;
   gap: 12px;
 }
 
+/* 小螢幕 1 欄，中等以上變 2~3 欄 */
 @media (min-width: 640px) {
   .service-grid {
-    grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   }
 }
 
-/* === 卡片基礎 === */
+/* 服務卡片本體 */
 
 .service-card {
   position: relative;
   display: flex;
   gap: 10px;
-  padding: 10px 12px;
+  background: radial-gradient(circle at top left, #020617, #020617);
   border-radius: 14px;
-  background: #020617;
-  border: 1px solid #0f172a;
+  border: 1px solid #0f172a; /* 底線：深色科技框 */
+  padding: 10px 12px;
   cursor: pointer;
   overflow: hidden;
   align-items: center;
   transition:
-    transform .12s ease,
-    box-shadow .15s ease,
-    filter .2s ease,
-    opacity .2s ease,
-    border-color .25s ease;
+    transform 0.08s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
 }
 
-/* === 基礎科技內框 === */
-
+/* 預設就有科技感外框：用 ::before 當內框光圈 */
 .service-card::before {
   content: "";
   position: absolute;
   inset: 1px;
   border-radius: 12px;
   border: 1px solid;
-  border-image: linear-gradient(135deg,#22c55e,#0ea5e9) 1;
-  opacity: 0.8;
+  border-image: linear-gradient(135deg, #22c55e, #0ea5e9) 1; /* 綠→藍 漸層框 */
+  opacity: 0.9;
   pointer-events: none;
-  transition: opacity .2s ease;
 }
+
+/* 預設也有一點微光 */
+.service-card {
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9),
+              0 14px 40px rgba(15, 23, 42, 0.9);
+}
+
+/* 滑過／互動時：外框顏色變化＋光感微變，科技感加強 */
+
+.service-card:hover,
+.service-card:active {
+  transform: translateY(-2px);
+  background: radial-gradient(circle at top left, #0b1120, #020617);
+  border-color: #1d4ed8; /* 外框主色偏藍 */
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.8),
+              0 18px 46px rgba(15, 23, 42, 0.95);
+}
+
+/* hover / active 時，內框顏色改成藍紫系，感覺不同科技層級 */
+
+.service-card:hover::before,
+.service-card:active::before {
+  border-image: linear-gradient(135deg, #38bdf8, #a855f7) 1;
+  opacity: 1;
+}
+
+/* 再加一條輕微掃光（只在 hover 時跑一下，手機沒有 hover 看不到也沒差） */
 
 .service-card::after {
   content: "";
   position: absolute;
-  inset:0;
-  background: linear-gradient(125deg,transparent 0%,rgba(56,189,248,.2) 50%,transparent 100%);
+  inset: 0;
+  background: linear-gradient(
+    125deg,
+    transparent 0%,
+    rgba(56, 189, 248, 0.2) 50%,
+    transparent 100%
+  );
   transform: translateX(-130%);
-  opacity:0;
-  pointer-events:none;
+  opacity: 0;
+  pointer-events: none;
 }
 
-/* === 桌機 hover === */
-
-@media (hover: hover) {
-  .service-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 8px rgba(56,189,248,.3),0 12px 28px rgba(0,0,0,.75);
-  }
-  .service-card:hover::before {
-    border-image: linear-gradient(135deg,#38bdf8,#a855f7) 1;
-    opacity:1;
-  }
-  .service-card:hover::after {
-    animation: scanBeam .6s ease-out forwards;
-  }
+.service-card:hover::after {
+  animation: scanBeam 0.6s ease-out forwards;
 }
 
 @keyframes scanBeam {
-  from { transform: translateX(-130%); opacity: .35; }
-  to   { transform: translateX(130%); opacity: 0; }
+  from {
+    transform: translateX(-130%);
+    opacity: 0.35;
+  }
+  to {
+    transform: translateX(130%);
+    opacity: 0;
+  }
 }
 
-/* === Spotlight + DIM (手機用) === */
-
-.service-card.dim {
-  opacity: .45;
-  filter: grayscale(.25) brightness(.8);
-  box-shadow:none;
-}
-
-.service-card.active-center {
-  opacity: 1;
-  filter: none;
-  transform: scale(1.02);
-}
-
-.service-card.active-center::before {
-  opacity: 1;
-  border-image: linear-gradient(135deg,#4ade80,#38bdf8) 1;
-}
-
-.service-card.active-center::after {
-  animation: scanBeam .6s ease-out forwards;
-}
-
-/* === Thumb + Body === */
+/* 左側縮圖：桌機約 1/3 寬 */
 
 .service-card-thumb {
   flex: 0 0 33%;
   height: 110px;
   border-radius: 12px;
-  background:#0f172a;
+  background: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  z-index: 1;
 }
 
+/* 真正有載到圖片時 */
 .service-card-thumb img {
-  width:100%;
-  height:100%;
-  object-fit:cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
+
+/* 載不到圖時，用文字縮圖 */
+.service-card-thumb.thumb-fallback {
+  background: linear-gradient(135deg, #1d4ed8, #22c55e);
+}
+
+.thumb-fallback-text {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+/* 右側文字：桌機約 2/3 寬 + 字稍大 */
 
 .service-card-body {
-  flex:0 0 67%;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
+  flex: 0 0 67%;
+  padding-left: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 1;
 }
 
 .service-card-name {
-  margin:0 0 4px;
-  font-weight:600;
-  font-size:1.08rem;
+  margin: 0 0 4px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #e5e7eb;
 }
 
 .service-card-desc {
-  margin:0;
-  font-size:.9rem;
-  color:#94a3b8;
+  margin: 0;
+  font-size: 0.9rem;
+  color: #94a3b8;
+  opacity: 0.95;
 }
 
-/* === 手機版排版：字 → 圖，Spotlight + DIM 啟動 === */
+/* 服務畫面（內嵌 iframe） */
+
+.view-service {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.service-header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.btn-back {
+  border-radius: 999px;
+  border: 1px solid #334155;
+  background: #0b1120;
+  color: #e2e8f0;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 1;
+}
+
+.btn-back:hover {
+  background: #020617;
+  border-color: #22c55e;
+}
+
+.service-header-text {
+  min-width: 0;
+}
+
+.service-title {
+  margin: 0 0 2px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+.service-desc {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+/* 服務畫面 iframe 外框 */
+
+.service-frame-wrapper {
+  width: 100%;
+  height: min(85vh, 780px);
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #1f2937;
+}
+
+.service-frame-wrapper iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #020617;
+}
+
+/* Footer */
+
+.app-footer {
+  padding: 8px 16px 14px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #64748b;
+  border-top: 1px solid #020617;
+}
+
+/* 手機版：圖在上、字在下，版面更好看 */
 
 @media (max-width: 640px) {
+  .app-title-group {
+    text-align: center;
+  }
+
+  .section-title {
+    text-align: center;
+  }
+
   .service-card {
-    flex-direction: column-reverse;
+    flex-direction: column;
     align-items: stretch;
   }
+
   .service-card-thumb {
-    width:100%;
-    height:200px;
+    flex: 0 0 auto;
+    width: 100%;
+    height: 200px; /* 手機圖較大，像 App 卡片 */
   }
+
   .service-card-body {
-    width:100%;
-    margin-bottom:8px;
-    text-align:center;
+    flex: 0 0 auto;
+    width: 100%;
+    padding-left: 0;
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  .service-card-name {
+    font-size: 1.15rem;
+  }
+
+  .service-card-desc {
+    font-size: 0.92rem;
+  }
+}
+
+/* === 手機 scroll 到置中時：JS 會加上 service-card--active，強調外框（一次只有一張） === */
+
+@media (max-width: 640px) {
+  .service-card.service-card--active {
+    transform: translateY(-2px);
+    background: radial-gradient(circle at top left, #0b1120, #020617);
+    border-color: #1d4ed8;
+    box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.8),
+                0 18px 46px rgba(15, 23, 42, 0.95);
+  }
+
+  .service-card.service-card--active::before {
+    border-image: linear-gradient(135deg, #38bdf8, #a855f7) 1;
+    opacity: 1;
+  }
+
+  .service-card.service-card--active::after {
+    animation: scanBeam 0.6s ease-out forwards;
   }
 }
