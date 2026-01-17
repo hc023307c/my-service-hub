@@ -37,8 +37,14 @@ const SERVICES = [
    description: "用號碼抽人 + 顏色紀錄 + 不重複/重複模式",
    url: "https://draw-people.vercel.app",
    thumbnail: "/thumbnails/draw-people.jpg"
+},
+ {
+   id: "buddhist-soundboard",
+   name: "法器演音",
+   description: "各種佛教法器聲音",
+   url: "https://buddhist-soundboard.vercel.app/",
+   thumbnail: "/thumbnails/buddhist-soundboard.jpg"
 }
-
 
   // 未來要新增服務，照這樣加就好：
   // {
