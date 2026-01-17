@@ -1,381 +1,119 @@
-/* 全域基礎設定 */
-* {
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+document.addEventListener("DOMContentLoaded", () => {
+  const gridEl = document.getElementById("serviceGrid");
+  const viewMain = document.getElementById("view-main");
+  const viewService = document.getElementById("view-service");
+  const backBtn = document.getElementById("backBtn");
+  const serviceTitleEl = document.getElementById("serviceTitle");
+  const serviceDescEl = document.getElementById("serviceDesc");
+  const serviceFrameEl = document.getElementById("serviceFrame");
 
-html {
-  font-size: clamp(14px, 3.2vw, 16px);
-}
+  function renderServiceCards() {
+    gridEl.innerHTML = "";
+    SERVICES.forEach(svc => {
+      const card=document.createElement("div");
+      card.className="service-card";
+      card.dataset.serviceId=svc.id;
 
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "PingFang TC", "Microsoft JhengHei", sans-serif;
-  background: #020617; /* 深色底 */
-  color: #e2e8f0;
-  line-height: 1.5;
-}
+      const thumb=document.createElement("div");
+      thumb.className="service-card-thumb";
 
-.app-shell {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+      const initials=(svc.name && svc.name.trim().slice(0,2)) || "App";
 
-/* Header */
+      if(svc.thumbnail){
+        const img=document.createElement("img");
+        img.src=svc.thumbnail;
+        img.alt=svc.name;
+        img.onerror=()=>{
+          thumb.classList.add("thumb-fallback");
+          thumb.innerHTML=`<span class="thumb-fallback-text">${initials}</span>`;
+        };
+        thumb.appendChild(img);
+      } else {
+        thumb.classList.add("thumb-fallback");
+        thumb.innerHTML=`<span class="thumb-fallback-text">${initials}</span>`;
+      }
 
-.app-header {
-  padding: 12px 16px;
-  border-bottom: 1px solid #1e293b;
-  background: radial-gradient(circle at top left, #1e293b, #020617);
-}
+      const body=document.createElement("div");
+      body.className="service-card-body";
 
-.app-title-group {
-  max-width: 1040px;
-  margin: 0 auto;
-}
+      const nameEl=document.createElement("h3");
+      nameEl.className="service-card-name";
+      nameEl.textContent=svc.name;
 
-.app-title {
-  margin: 0 0 4px;
-  font-size: clamp(1.4rem, 3.8vw, 2rem);
-  font-weight: 800;
-  color: #f9fafb;
-  letter-spacing: 0.02em;
-  text-shadow: 0 0 12px rgba(34, 197, 94, 0.3); /* 主題稍微亮一點 */
-}
+      const descEl=document.createElement("p");
+      descEl.className="service-card-desc";
+      descEl.textContent=svc.description;
 
-.app-subtitle {
-  margin: 0;
-  font-size: clamp(0.85rem, 2.6vw, 1rem);
-  color: #94a3b8;
-}
+      body.appendChild(nameEl);
+      body.appendChild(descEl);
+      card.appendChild(thumb);
+      card.appendChild(body);
 
-/* Main */
-
-.app-main {
-  flex: 1;
-  width: min(1040px, 100% - 24px);
-  margin: 12px auto 16px;
-}
-
-/* 共用 view */
-
-.view {
-  border-radius: 16px;
-  background: #020617;
-  border: 1px solid #1f2937;
-  padding: clamp(12px, 3vw, 18px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.65);
-}
-
-.hidden {
-  display: none;
-}
-
-.section-title {
-  margin: 0 0 10px;
-  font-size: clamp(1rem, 3vw, 1.2rem);
-  font-weight: 600;
-  color: #e5e7eb;
-}
-
-/* 主選單：服務卡片 grid */
-
-.service-grid {
-  display: grid;
-  gap: 12px;
-}
-
-/* 小螢幕 1 欄，中等以上變 2~3 欄 */
-@media (min-width: 640px) {
-  .service-grid {
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  }
-}
-
-/* 服務卡片本體 */
-
-.service-card {
-  position: relative;
-  display: flex;
-  gap: 10px;
-  background: radial-gradient(circle at top left, #020617, #020617);
-  border-radius: 14px;
-  border: 1px solid #0f172a; /* 底線：深色科技框 */
-  padding: 10px 12px;
-  cursor: pointer;
-  overflow: hidden;
-  align-items: center;
-  transition:
-    transform 0.08s ease,
-    box-shadow 0.15s ease,
-    background 0.15s ease,
-    border-color 0.15s ease;
-}
-
-/* 預設就有科技感外框：用 ::before 當內框光圈 */
-.service-card::before {
-  content: "";
-  position: absolute;
-  inset: 1px;
-  border-radius: 12px;
-  border: 1px solid;
-  border-image: linear-gradient(135deg, #22c55e, #0ea5e9) 1; /* 綠→藍 漸層框 */
-  opacity: 0.9;
-  pointer-events: none;
-}
-
-/* 預設也有一點微光 */
-.service-card {
-  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9),
-              0 14px 40px rgba(15, 23, 42, 0.9);
-}
-
-/* 滑過／互動時：外框顏色變化＋光感微變，科技感加強 */
-
-.service-card:hover,
-.service-card:active {
-  transform: translateY(-2px);
-  background: radial-gradient(circle at top left, #0b1120, #020617);
-  border-color: #1d4ed8; /* 外框主色偏藍 */
-  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.8),
-              0 18px 46px rgba(15, 23, 42, 0.95);
-}
-
-/* hover / active 時，內框顏色改成藍紫系，感覺不同科技層級 */
-
-.service-card:hover::before,
-.service-card:active::before {
-  border-image: linear-gradient(135deg, #38bdf8, #a855f7) 1;
-  opacity: 1;
-}
-
-/* 再加一條輕微掃光（只在 hover 時跑一下，手機沒有 hover 看不到也沒差） */
-
-.service-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    125deg,
-    transparent 0%,
-    rgba(56, 189, 248, 0.2) 50%,
-    transparent 100%
-  );
-  transform: translateX(-130%);
-  opacity: 0;
-  pointer-events: none;
-}
-
-.service-card:hover::after {
-  animation: scanBeam 0.6s ease-out forwards;
-}
-
-@keyframes scanBeam {
-  from {
-    transform: translateX(-130%);
-    opacity: 0.35;
-  }
-  to {
-    transform: translateX(130%);
-    opacity: 0;
-  }
-}
-
-/* 左側縮圖：桌機約 1/3 寬 */
-
-.service-card-thumb {
-  flex: 0 0 33%;
-  height: 110px;
-  border-radius: 12px;
-  background: #0f172a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  z-index: 1;
-}
-
-/* 真正有載到圖片時 */
-.service-card-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* 載不到圖時，用文字縮圖 */
-.service-card-thumb.thumb-fallback {
-  background: linear-gradient(135deg, #1d4ed8, #22c55e);
-}
-
-.thumb-fallback-text {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #e2e8f0;
-}
-
-/* 右側文字：桌機約 2/3 寬 + 字稍大 */
-
-.service-card-body {
-  flex: 0 0 67%;
-  padding-left: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  z-index: 1;
-}
-
-.service-card-name {
-  margin: 0 0 4px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #e5e7eb;
-}
-
-.service-card-desc {
-  margin: 0;
-  font-size: 0.9rem;
-  color: #94a3b8;
-  opacity: 0.95;
-}
-
-/* 服務畫面（內嵌 iframe） */
-
-.view-service {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.service-header {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 4px;
-  flex-wrap: wrap;
-}
-
-.btn-back {
-  border-radius: 999px;
-  border: 1px solid #334155;
-  background: #0b1120;
-  color: #e2e8f0;
-  padding: 6px 12px;
-  font-size: 0.85rem;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  z-index: 1;
-}
-
-.btn-back:hover {
-  background: #020617;
-  border-color: #22c55e;
-}
-
-.service-header-text {
-  min-width: 0;
-}
-
-.service-title {
-  margin: 0 0 2px;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #e5e7eb;
-}
-
-.service-desc {
-  margin: 0;
-  font-size: 0.8rem;
-  color: #94a3b8;
-}
-
-/* 服務畫面 iframe 外框 */
-
-.service-frame-wrapper {
-  width: 100%;
-  height: min(85vh, 780px);
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid #1f2937;
-}
-
-.service-frame-wrapper iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  background: #020617;
-}
-
-/* Footer */
-
-.app-footer {
-  padding: 8px 16px 14px;
-  text-align: center;
-  font-size: 0.75rem;
-  color: #64748b;
-  border-top: 1px solid #020617;
-}
-
-/* 手機版：圖在上、字在下，版面更好看 */
-
-@media (max-width: 640px) {
-  .app-title-group {
-    text-align: center;
+      card.addEventListener("click",()=>openService(svc));
+      gridEl.appendChild(card);
+    });
   }
 
-  .section-title {
-    text-align: center;
+  function openService(service){
+    serviceTitleEl.textContent=service.name;
+    serviceDescEl.textContent=service.description||"";
+    serviceFrameEl.src=service.url;
+    viewMain.classList.add("hidden");
+    viewService.classList.remove("hidden");
   }
 
-  .service-card {
-    flex-direction: column;
-    align-items: stretch;
+  function backToMain(){
+    serviceFrameEl.src="";
+    viewService.classList.add("hidden");
+    viewMain.classList.remove("hidden");
   }
 
-  .service-card-thumb {
-    flex: 0 0 auto;
-    width: 100%;
-    height: 200px; /* 手機圖較大，像 App 卡片 */
+  backBtn.addEventListener("click",backToMain);
+
+  /* === Spotlight (手機 + scroll) === */
+
+  function spotlightUpdate(){
+    const cards=[...document.querySelectorAll(".service-card")];
+    if(cards.length===0) return;
+
+    const centerY=window.innerHeight/2;
+    let best=null;
+    let bestDist=Infinity;
+
+    cards.forEach(card=>{
+      const rect=card.getBoundingClientRect();
+      const cardCenter=rect.top+rect.height/2;
+      const dist=Math.abs(cardCenter-centerY);
+      if(dist<bestDist){
+        bestDist=dist;
+        best=card;
+      }
+    });
+
+    cards.forEach(c=>{
+      if(c===best){
+        c.classList.add("active-center");
+        c.classList.remove("dim");
+      } else {
+        c.classList.remove("active-center");
+        c.classList.add("dim");
+      }
+    });
   }
 
-  .service-card-body {
-    flex: 0 0 auto;
-    width: 100%;
-    padding-left: 0;
-    margin-top: 8px;
-    text-align: center;
+  let ticking=false;
+  function onScroll(){
+    if(!ticking){
+      requestAnimationFrame(()=>{
+        spotlightUpdate();
+        ticking=false;
+      });
+      ticking=true;
+    }
   }
 
-  .service-card-name {
-    font-size: 1.15rem;
-  }
+  window.addEventListener("scroll",onScroll,{passive:true});
 
-  .service-card-desc {
-    font-size: 0.92rem;
-  }
-}
-
-/* === 手機 scroll 到置中時：JS 會加上 service-card--active，強調外框（一次只有一張） === */
-
-@media (max-width: 640px) {
-  .service-card.service-card--active {
-    transform: translateY(-2px);
-    background: radial-gradient(circle at top left, #0b1120, #020617);
-    border-color: #1d4ed8;
-    box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.8),
-                0 18px 46px rgba(15, 23, 42, 0.95);
-  }
-
-  .service-card.service-card--active::before {
-    border-image: linear-gradient(135deg, #38bdf8, #a855f7) 1;
-    opacity: 1;
-  }
-
-  .service-card.service-card--active::after {
-    animation: scanBeam 0.6s ease-out forwards;
-  }
-}
+  renderServiceCards();
+  spotlightUpdate();
+});
