@@ -88,34 +88,59 @@ document.addEventListener("DOMContentLoaded", () => {
 
   backBtn.addEventListener("click", backToMain);
 
-  // 4. 手機版：滑到置中時高亮卡片（IntersectionObserver）
+  // 4. 手機版：滑到最靠近視窗中間的卡片 → 只有那一張亮起
   function initScrollFocus() {
     // 只在手機 / 窄螢幕啟用這個效果
     if (!window.matchMedia || !window.matchMedia("(max-width: 640px)").matches) {
       return;
     }
 
-    const cards = document.querySelectorAll(".service-card");
-    if (!("IntersectionObserver" in window) || !cards.length) return;
+    const cards = Array.from(document.querySelectorAll(".service-card"));
+    if (!cards.length) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const el = entry.target;
-          // intersectionRatio 達到一定比例，視為「滑到視窗中間」
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
-            el.classList.add("service-card--active");
-          } else {
-            el.classList.remove("service-card--active");
+    let ticking = false;
+
+    function updateActiveCard() {
+      const viewportMiddle = window.innerHeight / 2;
+      let bestCard = null;
+      let bestDistance = Infinity;
+
+      cards.forEach((card) => {
+        const rect = card.getBoundingClientRect();
+        // 只考慮有出現在視窗裡的卡片
+        if (rect.bottom > 0 && rect.top < window.innerHeight) {
+          const cardMiddle = rect.top + rect.height / 2;
+          const distance = Math.abs(cardMiddle - viewportMiddle);
+
+          if (distance < bestDistance) {
+            bestDistance = distance;
+            bestCard = card;
           }
-        });
-      },
-      {
-        threshold: [0.4, 0.6, 0.8],
-      }
-    );
+        }
+      });
 
-    cards.forEach((card) => observer.observe(card));
+      // 先清掉全部 active
+      cards.forEach((card) => card.classList.remove("service-card--active"));
+
+      // 再把最靠近中間的那張打亮
+      if (bestCard) {
+        bestCard.classList.add("service-card--active");
+      }
+
+      ticking = false;
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(updateActiveCard);
+        ticking = true;
+      }
+    }
+
+    // 初始先算一次（避免一進頁面全都不亮）
+    updateActiveCard();
+
+    window.addEventListener("scroll", onScroll, { passive: true });
   }
 
   // 初始畫面：顯示主選單卡片 + 啟動手機 scroll 聚焦效果
