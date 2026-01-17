@@ -1,238 +1,64 @@
-/* === 基礎 === */
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>自製服務清單</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
 
-* {
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+<body>
+  <div class="app-shell">
 
-html {
-  font-size: clamp(14px, 3.2vw, 16px);
-}
+    <!-- Header -->
+    <header class="app-header">
+      <div class="app-title-group">
+        <h1 class="app-title">我的工具主選單</h1>
+        <p class="app-subtitle">集中入口，快速切換各種小服務</p>
+      </div>
+    </header>
 
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
-  background: #020617;
-  color: #e2e8f0;
-  line-height: 1.5;
-}
+    <!-- Main -->
+    <main class="app-main">
 
-.app-shell {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+      <!-- 主選單畫面：服務卡片列表 -->
+      <section id="view-main" class="view view-main">
+        <h2 class="section-title">可用服務</h2>
+        <div id="serviceGrid" class="service-grid">
+          <!-- 卡片由 app.js 動態產生 -->
+        </div>
+      </section>
 
-/* === Header === */
+      <!-- 服務內嵌畫面：用 iframe 載入外部服務 -->
+      <section id="view-service" class="view view-service hidden">
+        <div class="service-header">
+          <button id="backBtn" class="btn-back">← 回主選單</button>
+          <div class="service-header-text">
+            <h2 id="serviceTitle" class="service-title"></h2>
+            <p id="serviceDesc" class="service-desc"></p>
+          </div>
+        </div>
 
-.app-header {
-  padding: 12px 16px;
-  border-bottom: 1px solid #1e293b;
-  background: radial-gradient(circle at top left, #1e293b, #020617);
-}
+        <div class="service-frame-wrapper">
+          <iframe
+            id="serviceFrame"
+            src=""
+            frameborder="0"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </section>
 
-.app-title-group {
-  max-width: 1040px;
-  margin: 0 auto;
-}
+    </main>
 
-.app-title {
-  margin: 0 0 4px;
-  font-size: clamp(1.4rem, 3.8vw, 2rem);
-  font-weight: 800;
-  color: #f9fafb;
-  text-shadow: 0 0 12px rgba(34, 197, 94, 0.3);
-}
+    <!-- Footer -->
+    <footer class="app-footer">
+      <span>© 2026 我的工具集合</span>
+    </footer>
 
-.app-subtitle {
-  margin: 0;
-  font-size: clamp(0.85rem, 2.6vw, 1rem);
-  color: #94a3b8;
-}
+  </div>
 
-/* === 主內容 === */
-
-.app-main {
-  flex: 1;
-  width: min(1040px, 100% - 24px);
-  margin: 12px auto 16px;
-}
-
-.view {
-  border-radius: 16px;
-  background: #020617;
-  border: 1px solid #1f2937;
-  padding: clamp(12px, 3vw, 18px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.65);
-}
-
-.hidden {
-  display: none;
-}
-
-.section-title {
-  margin: 0 0 10px;
-  font-size: clamp(1rem,3vw,1.2rem);
-  font-weight: 600;
-  color: #e5e7eb;
-}
-
-/* === Grid 卡片 === */
-
-.service-grid {
-  display: grid;
-  gap: 12px;
-}
-
-@media (min-width: 640px) {
-  .service-grid {
-    grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
-  }
-}
-
-/* === 卡片基礎 === */
-
-.service-card {
-  position: relative;
-  display: flex;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  background: #020617;
-  border: 1px solid #0f172a;
-  cursor: pointer;
-  overflow: hidden;
-  align-items: center;
-  transition:
-    transform .12s ease,
-    box-shadow .15s ease,
-    filter .2s ease,
-    opacity .2s ease,
-    border-color .25s ease;
-}
-
-/* === 基礎科技內框 === */
-
-.service-card::before {
-  content: "";
-  position: absolute;
-  inset: 1px;
-  border-radius: 12px;
-  border: 1px solid;
-  border-image: linear-gradient(135deg,#22c55e,#0ea5e9) 1;
-  opacity: 0.8;
-  pointer-events: none;
-  transition: opacity .2s ease;
-}
-
-.service-card::after {
-  content: "";
-  position: absolute;
-  inset:0;
-  background: linear-gradient(125deg,transparent 0%,rgba(56,189,248,.2) 50%,transparent 100%);
-  transform: translateX(-130%);
-  opacity:0;
-  pointer-events:none;
-}
-
-/* === 桌機 hover === */
-
-@media (hover: hover) {
-  .service-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 8px rgba(56,189,248,.3),0 12px 28px rgba(0,0,0,.75);
-  }
-  .service-card:hover::before {
-    border-image: linear-gradient(135deg,#38bdf8,#a855f7) 1;
-    opacity:1;
-  }
-  .service-card:hover::after {
-    animation: scanBeam .6s ease-out forwards;
-  }
-}
-
-@keyframes scanBeam {
-  from { transform: translateX(-130%); opacity: .35; }
-  to   { transform: translateX(130%); opacity: 0; }
-}
-
-/* === Spotlight + DIM (手機用) === */
-
-.service-card.dim {
-  opacity: .45;
-  filter: grayscale(.25) brightness(.8);
-  box-shadow:none;
-}
-
-.service-card.active-center {
-  opacity: 1;
-  filter: none;
-  transform: scale(1.02);
-}
-
-.service-card.active-center::before {
-  opacity: 1;
-  border-image: linear-gradient(135deg,#4ade80,#38bdf8) 1;
-}
-
-.service-card.active-center::after {
-  animation: scanBeam .6s ease-out forwards;
-}
-
-/* === Thumb + Body === */
-
-.service-card-thumb {
-  flex: 0 0 33%;
-  height: 110px;
-  border-radius: 12px;
-  background:#0f172a;
-  overflow: hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.service-card-thumb img {
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.service-card-body {
-  flex:0 0 67%;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-
-.service-card-name {
-  margin:0 0 4px;
-  font-weight:600;
-  font-size:1.08rem;
-}
-
-.service-card-desc {
-  margin:0;
-  font-size:.9rem;
-  color:#94a3b8;
-}
-
-/* === 手機版排版：字 → 圖，Spotlight + DIM 啟動 === */
-
-@media (max-width: 640px) {
-  .service-card {
-    flex-direction: column-reverse;
-    align-items: stretch;
-  }
-  .service-card-thumb {
-    width:100%;
-    height:200px;
-  }
-  .service-card-body {
-    width:100%;
-    margin-bottom:8px;
-    text-align:center;
-  }
-}
+  <script src="services.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
