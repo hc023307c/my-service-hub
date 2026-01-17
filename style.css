@@ -1,4 +1,4 @@
-/* === Global Base === */
+/* === Base === */
 * {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
@@ -10,140 +10,83 @@ html {
 }
 
 body {
-  margin: 0;
+  margin:0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     "PingFang TC", "Microsoft JhengHei", sans-serif;
-  background: #020617;
-  color: #e2e8f0;
-  line-height: 1.5;
-}
-
-.app-shell {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* === Header === */
-.app-header {
-  padding: 12px 16px;
-  border-bottom: 1px solid #1e293b;
-  background: radial-gradient(circle at top left, #1e293b, #020617);
-}
-
-.app-title-group {
-  max-width: 1040px;
-  margin: 0 auto;
-}
-
-.app-title {
-  margin: 0 0 4px;
-  font-size: clamp(1.4rem, 3.8vw, 2rem);
-  font-weight: 800;
-  color: #f9fafb;
-  letter-spacing: 0.02em;
-  text-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
-}
-
-.app-subtitle {
-  margin: 0;
-  font-size: clamp(0.85rem, 2.6vw, 1rem);
-  color: #94a3b8;
+  background:#020617;
+  color:#e2e8f0;
+  line-height:1.5;
 }
 
 /* === Layout === */
 
 .app-main {
-  flex: 1;
-  width: min(1040px, 100% - 24px);
-  margin: 12px auto 16px;
+  flex:1;
+  width:min(1040px,100% - 24px);
+  margin:12px auto 16px;
 }
-
-.view {
-  border-radius: 16px;
-  background: #020617;
-  border: 1px solid #1f2937;
-  padding: clamp(12px, 3vw, 18px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.65);
-}
-
-.hidden {
-  display: none;
-}
-
-.section-title {
-  margin: 0 0 10px;
-  font-size: clamp(1rem, 3vw, 1.2rem);
-  font-weight: 600;
-  color: #e5e7eb;
-}
-
-/* === Cards Grid === */
 
 .service-grid {
-  display: grid;
-  gap: 12px;
+  display:grid;
+  gap:12px;
 }
 
-@media (min-width: 640px) {
+@media (min-width:640px) {
   .service-grid {
-    grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+    grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
   }
 }
 
-/* === Service Card === */
+/* === HUD 卡片 === */
 
 .service-card {
-  position: relative;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  background: #020617;
-  border-radius: 14px;
-  border: 1px solid #0f172a;
-  padding: 10px 12px;
-  cursor: pointer;
-  overflow: hidden;
+  position:relative;
+  display:flex;
+  gap:10px;
+  padding:10px 12px;
+  align-items:center;
+  border-radius:14px;
+  background:#020617;
+  border:1px solid #0f172a;
+  cursor:pointer;
+  overflow:hidden;
   transition:
-    transform 0.12s ease,
-    box-shadow 0.18s ease,
-    background 0.18s ease,
-    border-color 0.18s ease;
+    transform .12s ease,
+    box-shadow .18s ease,
+    background .18s ease,
+    border-color .18s ease,
+    filter .18s ease;
 }
 
-/* HUD Inner Border */
+/* HUD base inner border */
 .service-card::before {
   content:"";
   position:absolute;
   inset:1px;
   border-radius:12px;
   border:1px solid;
-  border-image: linear-gradient(135deg,#3b82f6,#4f46e5) 1;
+  border-image:linear-gradient(135deg,#3b82f6,#4f46e5) 1;
   opacity:.9;
   pointer-events:none;
 }
 
-/* HUD soft shadow base */
-.service-card {
-  box-shadow:
-    0 0 0 1px rgba(15,23,42,.9),
-    0 14px 40px rgba(15,23,42,.9);
+/* Hover (桌機) */
+@media (min-width:640px) {
+  .service-card:hover {
+    transform:translateY(-2px);
+    background:radial-gradient(circle at top left,#0b1120,#020617);
+    box-shadow:
+      0 0 0 1px rgba(56,189,248,.7),
+      0 18px 46px rgba(15,23,42,.9);
+    border-color:rgba(56,189,248,.7);
+  }
+
+  .service-card:hover::before {
+    border-image:linear-gradient(135deg,#38bdf8,#6366f1) 1;
+  }
 }
 
-/* Hover = Blue-Violet HUD Boost */
-.service-card:hover {
-  transform:translateY(-2px);
-  background:radial-gradient(circle at top left,#0b1120,#020617);
-  box-shadow:
-    0 0 0 1px rgba(56,189,248,.8),
-    0 18px 46px rgba(15,23,42,.95);
-}
-
-.service-card:hover::before {
-  border-image: linear-gradient(135deg,#38bdf8,#6366f1) 1;
-}
-
-/* Scan Beam HUD */
+/* HUD laser beam */
 .service-card::after {
   content:"";
   position:absolute;
@@ -151,7 +94,7 @@ body {
   background:linear-gradient(
     125deg,
     transparent 0%,
-    rgba(56,189,248,.25) 50%,
+    rgba(56,189,248,.22) 50%,
     transparent 100%
   );
   transform:translateX(-130%);
@@ -159,8 +102,10 @@ body {
   pointer-events:none;
 }
 
-.service-card:hover::after {
-  animation:scanBeam .55s ease-out forwards;
+@media (min-width:640px) {
+  .service-card:hover::after {
+    animation:scanBeam .55s ease-out forwards;
+  }
 }
 
 @keyframes scanBeam {
@@ -168,27 +113,10 @@ body {
   to   { transform:translateX(130%); opacity:0; }
 }
 
-/* === Card Content === */
+/* === 文字 + 圖片比例 (桌機) === */
 
-/* Desktop: text 1/3 + img 2/3 */
 .service-card-body {
   flex:0 0 33%;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-
-.service-card-name {
-  margin:0 0 4px;
-  font-size:1.15rem;
-  font-weight:600;
-  color:#e5e7eb;
-}
-
-.service-card-desc {
-  margin:0;
-  font-size:.9rem;
-  color:#94a3b8;
 }
 
 .service-card-thumb {
@@ -202,15 +130,9 @@ body {
   overflow:hidden;
 }
 
-.service-card-thumb img {
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
+/* === Spotlight Active (手機) === */
 
-/* === Mobile Spotlight Mode === */
-
-@media (max-width:640px){
+@media (max-width:640px) {
   .service-card {
     flex-direction:row;
   }
@@ -226,12 +148,13 @@ body {
     height:160px;
   }
 
-  /* Spotlight 强調選中 */
+  /* === 這裡是手機 spotlight highlight === */
   .service-card.service-card--active {
     background:radial-gradient(circle at center,#0b1120,#020617);
     box-shadow:
       0 0 12px rgba(56,189,248,.42),
       0 0 22px rgba(99,102,241,.35);
+    filter:brightness(1.18) contrast(1.05);
   }
 
   .service-card.service-card--active::before {
@@ -241,14 +164,15 @@ body {
   .service-card.service-card--active::after {
     animation:scanBeam .6s ease-out forwards;
   }
+
+  /* 非 active 卡片變暗一點：讓 spotlight 明顯 */
+  .service-card:not(.service-card--active) {
+    filter:brightness(.7) contrast(.9);
+    opacity:.82;
+  }
 }
 
-/* === iframe View === */
-.view-service {
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
+/* === iframe view === */
 
 .service-frame-wrapper {
   width:100%;
@@ -263,12 +187,4 @@ body {
   height:100%;
   border:none;
   background:#020617;
-}
-
-/* === Footer === */
-.app-footer {
-  padding:10px 16px;
-  text-align:center;
-  font-size:.78rem;
-  color:#64748b;
 }
