@@ -359,7 +359,7 @@ body {
   }
 }
 
-/* === 手機 scroll 到置中時：JS 會加上 service-card--active，強調外框 === */
+/* === 手機 scroll 到置中時：JS 會加上 service-card--active，強調外框（一次只有一張） === */
 
 @media (max-width: 640px) {
   .service-card.service-card--active {
